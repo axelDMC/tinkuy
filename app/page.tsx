@@ -1,17 +1,31 @@
 'use client'
 
 import Link from 'next/link'
-import { Share2, Clock, CreditCard, MapPin, Zap, CalendarPlus, Send, Banknote, Users, ArrowRight } from 'lucide-react'
+import { Share2, Clock, CreditCard, MapPin, Zap, CalendarPlus, Send, Banknote, Users } from 'lucide-react'
 import { motion } from 'motion/react'
-import { InfiniteSlider } from '@/components/infinite-slider'
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 28 },
+  hidden: { opacity: 0, y: 24 },
   show: (delay = 0) => ({
     opacity: 1,
     y: 0,
     transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1], delay },
   }),
+}
+
+function SectionHeader({ label, title }: { label: string; title: React.ReactNode }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 14 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5 }}
+      className="text-center mb-10"
+    >
+      <p className="text-zinc-500 text-xs uppercase tracking-widest mb-2">{label}</p>
+      <h2 className="text-xl md:text-2xl font-bold tracking-tight">{title}</h2>
+    </motion.div>
+  )
 }
 
 function GlassButton({ href, children }: { href: string; children: React.ReactNode }) {
@@ -44,23 +58,34 @@ export default function Home() {
       </nav>
 
       {/* ── HERO ── */}
-      <section className="relative flex flex-col items-center text-center px-6 pt-20 pb-20 gap-7">
+      <section className="relative flex flex-col items-center text-center px-6 pt-20 pb-16 gap-6">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[600px] rounded-full bg-green-500/10 blur-[150px] pointer-events-none" />
 
-        {/* Pill */}
+        {/* Emojis individuales con float escalonado */}
         <motion.div
           initial="hidden" animate="show" custom={0} variants={fadeUp}
-          className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm text-xs text-zinc-300"
+          className="flex gap-4 select-none"
         >
-          <span className="flex items-center justify-center w-5 h-5 rounded-md bg-green-500/20 border border-green-500/30">
-            <Zap size={11} className="text-green-400" />
-          </span>
-          Confirmación de pagos en tiempo real · Gratis
+          {['⚽', '🏐', '🏄', '🏀'].map((emoji, i) => (
+            <motion.span
+              key={emoji}
+              className="text-5xl"
+              animate={{ y: [0, -12, 0] }}
+              transition={{
+                duration: 2.8,
+                repeat: Infinity,
+                delay: i * 0.35,
+                ease: 'easeInOut',
+              }}
+            >
+              {emoji}
+            </motion.span>
+          ))}
         </motion.div>
 
         {/* Headline */}
         <motion.h1
-          initial="hidden" animate="show" custom={0.12} variants={fadeUp}
+          initial="hidden" animate="show" custom={0.1} variants={fadeUp}
           className="text-5xl md:text-7xl font-bold leading-[1.07] tracking-tight max-w-3xl"
         >
           <span className="bg-gradient-to-b from-white to-white/65 bg-clip-text text-transparent">
@@ -74,8 +99,8 @@ export default function Home() {
 
         {/* Sub */}
         <motion.p
-          initial="hidden" animate="show" custom={0.24} variants={fadeUp}
-          className="text-white/55 text-lg max-w-md leading-relaxed"
+          initial="hidden" animate="show" custom={0.2} variants={fadeUp}
+          className="text-white/50 text-base md:text-lg max-w-md leading-relaxed"
         >
           Crea el evento en segundos, comparte el link y los jugadores se apuntan
           y confirman su pago con Yape o Plin. Tú solo apareces a jugar.
@@ -83,42 +108,22 @@ export default function Home() {
 
         {/* CTA */}
         <motion.div
-          initial="hidden" animate="show" custom={0.36} variants={fadeUp}
-          className="flex flex-col items-center gap-3"
+          initial="hidden" animate="show" custom={0.3} variants={fadeUp}
+          className="flex flex-col items-center gap-2.5"
         >
           <GlassButton href="/auth">Crear mi evento gratis</GlassButton>
           <p className="text-zinc-600 text-xs">Gratis para siempre · Sin descargar nada</p>
         </motion.div>
       </section>
 
-      {/* ── SLIDER ── */}
-      <motion.div
-        initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-        transition={{ delay: 0.5, duration: 0.8 }}
-        className="border-y border-white/5 bg-white/2 backdrop-blur-sm py-5"
-      >
-        <div className="flex flex-col md:flex-row items-center gap-4 max-w-5xl mx-auto px-6">
-          <p className="text-zinc-500 text-xs uppercase tracking-widest shrink-0">Para cualquier deporte</p>
-          <div className="hidden md:block w-px h-5 bg-zinc-800" />
-          <InfiniteSlider />
-        </div>
-      </motion.div>
-
       {/* ── CÓMO FUNCIONA ── */}
-      <section className="max-w-5xl mx-auto px-6 py-24">
-        <motion.div
-          initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }} transition={{ duration: 0.5 }}
-          className="text-center mb-14"
-        >
-          <p className="text-zinc-500 text-xs uppercase tracking-widest mb-3">Cómo funciona</p>
-          <h2 className="text-2xl md:text-3xl font-bold tracking-tight">
-            Del caos al partido en{' '}
-            <span className="text-green-400">4 pasos</span>
-          </h2>
-        </motion.div>
+      <section className="max-w-5xl mx-auto px-6 py-16">
+        <SectionHeader
+          label="Cómo funciona"
+          title={<>Del caos al partido en <span className="text-green-400">4 pasos</span></>}
+        />
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
           {[
             {
               icon: <CalendarPlus size={20} className="text-green-400" />,
@@ -142,91 +147,78 @@ export default function Home() {
               icon: <Users size={20} className="text-green-400" />,
               n: '04',
               title: 'Solo aparece a jugar',
-              text: 'Ves en tiempo real quién va y quién pagó. Tú solo te preocupas por ganar.',
+              text: 'Ves en tiempo real quién va y quién pagó. Solo te preocupas por ganar.',
             },
           ].map((s, i) => (
             <motion.div
               key={s.n}
-              initial={{ opacity: 0, y: 28 }}
+              initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.1 }}
+              transition={{ duration: 0.5, delay: i * 0.09 }}
               whileHover={{ y: -4, transition: { duration: 0.2 } }}
-              className="relative group flex flex-col gap-4 p-5 rounded-2xl border border-white/8 bg-white/3 hover:bg-white/5 hover:border-white/15 backdrop-blur-sm transition-colors duration-200 cursor-default"
+              className="relative group flex flex-col gap-4 p-5 rounded-2xl border border-white/8 bg-white/3 hover:bg-white/5 hover:border-white/14 backdrop-blur-sm transition-colors duration-200 cursor-default"
             >
-              {/* Number badge */}
-              <span className="absolute top-4 right-4 text-xs font-bold text-zinc-700 group-hover:text-zinc-600 transition-colors">
+              <span className="absolute top-4 right-4 text-xs font-bold text-zinc-800 group-hover:text-zinc-700 transition-colors">
                 {s.n}
               </span>
-
-              {/* Icon box */}
               <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-green-500/10 border border-green-500/20 group-hover:bg-green-500/15 transition-colors duration-200">
                 {s.icon}
               </div>
-
               <div>
                 <h3 className="font-semibold text-white text-sm mb-1.5">{s.title}</h3>
                 <p className="text-zinc-500 text-xs leading-relaxed">{s.text}</p>
               </div>
-
-              {/* Subtle bottom accent on hover */}
-              <div className="absolute bottom-0 left-4 right-4 h-px bg-gradient-to-r from-transparent via-green-500/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="absolute bottom-0 left-4 right-4 h-px bg-gradient-to-r from-transparent via-green-500/25 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             </motion.div>
           ))}
         </div>
       </section>
 
       {/* ── FEATURES ── */}
-      <section className="max-w-5xl mx-auto px-6 pb-24">
-        <motion.div
-          initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }} transition={{ duration: 0.5 }}
-          className="text-center mb-14"
-        >
-          <p className="text-zinc-500 text-xs uppercase tracking-widest mb-3">Por qué Tinkuy</p>
-          <h2 className="text-2xl md:text-3xl font-bold tracking-tight">
-            Todo lo que necesitas,{' '}
-            <span className="text-green-400">nada de lo que no</span>
-          </h2>
-        </motion.div>
+      <section className="max-w-5xl mx-auto px-6 py-16 border-t border-white/5">
+        <SectionHeader
+          label="Por qué Tinkuy"
+          title={<>Todo lo que necesitas, <span className="text-green-400">nada de lo que no</span></>}
+        />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {[
             {
-              icon: <Share2 size={22} className="text-green-400" />,
+              icon: <Share2 size={20} className="text-green-400" />,
               title: 'Un link, todo resuelto',
               desc: 'Los jugadores lo abren desde WhatsApp sin descargar ninguna app ni crear cuenta.',
             },
             {
-              icon: <Clock size={22} className="text-green-400" />,
+              icon: <Clock size={20} className="text-green-400" />,
               title: 'Actualizaciones en tiempo real',
-              desc: 'La lista se actualiza automáticamente cada pocos segundos. Sabes al instante cuántos van.',
+              desc: 'La lista se actualiza automáticamente. Sabes al instante cuántos van.',
             },
             {
-              icon: <CreditCard size={22} className="text-green-400" />,
+              icon: <CreditCard size={20} className="text-green-400" />,
               title: 'Pagos con Yape / Plin',
-              desc: 'Los jugadores suben su captura de pago. Tú ves quién pagó y quién está pendiente sin hacer nada extra.',
+              desc: 'Los jugadores suben su captura. Tú ves quién pagó y quién está pendiente.',
             },
             {
-              icon: <MapPin size={22} className="text-green-400" />,
+              icon: <MapPin size={20} className="text-green-400" />,
               title: 'Cualquier deporte',
               desc: 'Fútbol, vóley, surf, básquet — cualquier actividad grupal que necesite organización.',
             },
           ].map((f, i) => (
             <motion.div
               key={f.title}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 18 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.45, delay: i * 0.09 }}
+              transition={{ duration: 0.45, delay: i * 0.08 }}
               whileHover={{ scale: 1.015, transition: { duration: 0.15 } }}
-              className="group flex gap-5 p-6 rounded-2xl border border-white/8 bg-white/3 hover:bg-white/5 hover:border-white/14 backdrop-blur-sm transition-colors duration-200 cursor-default"
+              className="group flex gap-4 p-5 rounded-2xl border border-white/8 bg-white/3 hover:bg-white/5 hover:border-white/14 backdrop-blur-sm transition-colors duration-200 cursor-default"
             >
-              <div className="shrink-0 flex items-center justify-center w-11 h-11 rounded-xl bg-green-500/10 border border-green-500/20 group-hover:bg-green-500/15 transition-colors duration-200 mt-0.5">
+              <div className="shrink-0 flex items-center justify-center w-10 h-10 rounded-xl bg-green-500/10 border border-green-500/20 group-hover:bg-green-500/15 transition-colors duration-200 mt-0.5">
                 {f.icon}
               </div>
               <div>
-                <h3 className="font-semibold text-white mb-2">{f.title}</h3>
+                <h3 className="font-semibold text-white text-sm mb-1.5">{f.title}</h3>
                 <p className="text-zinc-400 text-sm leading-relaxed">{f.desc}</p>
               </div>
             </motion.div>
@@ -236,17 +228,10 @@ export default function Home() {
 
       {/* ── PRECIOS ── */}
       <section className="max-w-2xl mx-auto px-6 py-16 border-t border-white/5">
-        <motion.div
-          initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }} transition={{ duration: 0.5 }}
-          className="text-center mb-12"
-        >
-          <p className="text-zinc-500 text-xs uppercase tracking-widest mb-3">Planes</p>
-          <h2 className="text-2xl md:text-3xl font-bold tracking-tight">
-            Empieza gratis,{' '}
-            <span className="text-green-400">crece cuando quieras</span>
-          </h2>
-        </motion.div>
+        <SectionHeader
+          label="Planes"
+          title={<>Empieza gratis, <span className="text-green-400">crece cuando quieras</span></>}
+        />
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
           {[
@@ -274,23 +259,23 @@ export default function Home() {
           ].map((p, i) => (
             <motion.div
               key={p.name}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 18 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: i * 0.1 }}
               className={`relative rounded-2xl p-5 flex flex-col gap-4 transition-all duration-200 ${
                 p.highlight
-                  ? 'bg-white/5 border border-green-500/50 shadow-2xl shadow-green-500/8 md:scale-[1.05]'
+                  ? 'bg-white/5 border border-green-500/50 shadow-xl shadow-green-500/8 md:scale-[1.05]'
                   : 'bg-white/3 border border-white/8 hover:border-white/15'
               }`}
             >
               {p.highlight && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-green-500 text-black text-xs font-bold">
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-green-500 text-black text-xs font-bold whitespace-nowrap">
                   Popular
                 </div>
               )}
               <div>
-                <p className="text-base font-semibold text-white/80">{p.name}</p>
+                <p className="text-sm font-semibold text-white/70">{p.name}</p>
                 <p className="text-3xl font-bold mt-1 tracking-tight">
                   {p.price}
                   <span className="text-zinc-500 text-sm font-normal ml-1">{p.sub}</span>
@@ -300,7 +285,7 @@ export default function Home() {
               <ul className="flex flex-col gap-2">
                 {p.features.map((f) => (
                   <li key={f} className="text-zinc-400 text-sm flex items-center gap-2.5">
-                    <span className="text-green-400 text-base leading-none">✓</span>
+                    <span className="text-green-400 leading-none">✓</span>
                     {f}
                   </li>
                 ))}
@@ -309,35 +294,32 @@ export default function Home() {
           ))}
         </div>
 
-        <p className="text-center text-zinc-600 text-xs mt-6">
+        <p className="text-center text-zinc-600 text-xs mt-5">
           Plan Pro y Club vía WhatsApp · Activación en menos de 24h
         </p>
       </section>
 
       {/* ── CTA FINAL ── */}
-      <section className="relative text-center px-6 py-28 border-t border-white/5 overflow-hidden">
+      <section className="relative text-center px-6 py-20 border-t border-white/5 overflow-hidden">
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <div className="w-[600px] h-[350px] rounded-full bg-green-500/7 blur-[110px]" />
+          <div className="w-[600px] h-[300px] rounded-full bg-green-500/7 blur-[110px]" />
         </div>
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 18 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="relative flex flex-col items-center gap-5"
+          className="relative flex flex-col items-center gap-4"
         >
           <p className="text-zinc-500 text-xs uppercase tracking-widest">Únete hoy</p>
-          <h2 className="text-3xl md:text-5xl font-bold tracking-tight max-w-xl leading-tight">
+          <h2 className="text-3xl md:text-4xl font-bold tracking-tight max-w-xl leading-tight">
             ¿Listo para el{' '}
             <span className="text-green-400">próximo partido?</span>
           </h2>
-          <p className="text-zinc-500 text-sm max-w-sm">
-            Sin tarjeta de crédito. Sin descargas. Empieza en menos de un minuto.
+          <p className="text-zinc-500 text-sm max-w-xs">
+            Sin tarjeta de crédito. Sin descargas. Empieza en un minuto.
           </p>
-          <div className="flex flex-col sm:flex-row items-center gap-3 mt-2">
+          <div className="mt-1">
             <GlassButton href="/auth">Empezar gratis</GlassButton>
-            <Link href="/auth" className="flex items-center gap-1.5 text-zinc-400 hover:text-white text-sm transition-colors">
-              Ver demo <ArrowRight size={14} />
-            </Link>
           </div>
         </motion.div>
       </section>
