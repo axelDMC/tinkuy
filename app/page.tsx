@@ -1,163 +1,348 @@
 'use client'
 
 import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import { Users, MapPin, CreditCard, Share2, Clock } from 'lucide-react'
+import { Share2, Clock, CreditCard, MapPin, Zap, CalendarPlus, Send, Banknote, Users, ArrowRight } from 'lucide-react'
+import { motion } from 'motion/react'
+import { InfiniteSlider } from '@/components/infinite-slider'
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 28 },
+  show: (delay = 0) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1], delay },
+  }),
+}
+
+function GlassButton({ href, children }: { href: string; children: React.ReactNode }) {
+  return (
+    <div className="p-[1px] rounded-2xl bg-gradient-to-r from-green-400/40 via-emerald-400/15 to-green-400/40">
+      <Link href={href}>
+        <button className="flex items-center gap-3 bg-black hover:bg-zinc-950 text-white font-semibold px-6 py-3.5 rounded-2xl text-base transition-all duration-200 group">
+          <span className="flex items-center justify-center w-8 h-8 rounded-xl bg-gradient-to-br from-green-400 to-emerald-500 text-black shadow-lg shadow-green-500/30 group-hover:scale-110 transition-transform duration-200">
+            <Zap size={15} />
+          </span>
+          {children}
+        </button>
+      </Link>
+    </div>
+  )
+}
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-black text-white">
+    <main className="min-h-screen bg-black text-white overflow-hidden">
+
       {/* Nav */}
-      <nav className="flex items-center justify-between px-6 py-4 border-b border-zinc-800">
-        <span className="text-xl font-bold text-green-400">Tinkuy</span>
+      <nav className="sticky top-0 z-50 flex items-center justify-between px-6 py-4 border-b border-white/8 bg-black/70 backdrop-blur-md">
+        <span className="text-xl font-bold text-green-400 tracking-tight">Tinkuy</span>
         <Link href="/auth">
-          <Button className="bg-zinc-800 text-white hover:bg-zinc-700 border border-zinc-700">
+          <button className="text-sm text-white/70 hover:text-white border border-white/10 hover:border-white/20 bg-white/5 hover:bg-white/8 px-4 py-2 rounded-xl transition-all duration-200">
             Entrar
-          </Button>
+          </button>
         </Link>
       </nav>
 
-      {/* Hero */}
-      <section className="flex flex-col items-center justify-center text-center px-6 py-24 gap-6">
-        <div className="flex gap-2 text-3xl">⚽ 🏐 🏄 🏀</div>
-        <h1 className="text-4xl md:text-5xl font-bold leading-tight max-w-2xl">
-          Organiza tu deporte<br />
-          <span className="text-green-400">sin el caos de WhatsApp</span>
-        </h1>
-        <p className="text-zinc-400 text-lg max-w-md">
-          Crea el evento en segundos, comparte el link y los jugadores se apuntan y confirman su pago con Yape o Plin. Tú solo apareces a jugar.
-        </p>
-        <Link href="/auth">
-          <Button className="bg-green-500 hover:bg-green-400 text-black font-bold px-8 py-6 text-lg rounded-xl">
-            Crear mi evento gratis →
-          </Button>
-        </Link>
-        <p className="text-zinc-600 text-sm">Gratis para siempre · Sin descargar nada</p>
+      {/* ── HERO ── */}
+      <section className="relative flex flex-col items-center text-center px-6 pt-20 pb-20 gap-7">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[600px] rounded-full bg-green-500/10 blur-[150px] pointer-events-none" />
+
+        {/* Pill */}
+        <motion.div
+          initial="hidden" animate="show" custom={0} variants={fadeUp}
+          className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm text-xs text-zinc-300"
+        >
+          <span className="flex items-center justify-center w-5 h-5 rounded-md bg-green-500/20 border border-green-500/30">
+            <Zap size={11} className="text-green-400" />
+          </span>
+          Confirmación de pagos en tiempo real · Gratis
+        </motion.div>
+
+        {/* Headline */}
+        <motion.h1
+          initial="hidden" animate="show" custom={0.12} variants={fadeUp}
+          className="text-5xl md:text-7xl font-bold leading-[1.07] tracking-tight max-w-3xl"
+        >
+          <span className="bg-gradient-to-b from-white to-white/65 bg-clip-text text-transparent">
+            Organiza tu deporte
+          </span>
+          <br />
+          <span className="bg-gradient-to-r from-green-300 via-green-400 to-emerald-400 bg-clip-text text-transparent">
+            sin el caos de WhatsApp
+          </span>
+        </motion.h1>
+
+        {/* Sub */}
+        <motion.p
+          initial="hidden" animate="show" custom={0.24} variants={fadeUp}
+          className="text-white/55 text-lg max-w-md leading-relaxed"
+        >
+          Crea el evento en segundos, comparte el link y los jugadores se apuntan
+          y confirman su pago con Yape o Plin. Tú solo apareces a jugar.
+        </motion.p>
+
+        {/* CTA */}
+        <motion.div
+          initial="hidden" animate="show" custom={0.36} variants={fadeUp}
+          className="flex flex-col items-center gap-3"
+        >
+          <GlassButton href="/auth">Crear mi evento gratis</GlassButton>
+          <p className="text-zinc-600 text-xs">Gratis para siempre · Sin descargar nada</p>
+        </motion.div>
       </section>
 
-      {/* Cómo funciona */}
-      <section className="max-w-lg mx-auto px-6 pb-16">
-        <h2 className="text-center text-zinc-500 text-sm uppercase tracking-widest mb-8">Cómo funciona</h2>
-        <div className="flex flex-col gap-4">
+      {/* ── SLIDER ── */}
+      <motion.div
+        initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+        transition={{ delay: 0.5, duration: 0.8 }}
+        className="border-y border-white/5 bg-white/2 backdrop-blur-sm py-5"
+      >
+        <div className="flex flex-col md:flex-row items-center gap-4 max-w-5xl mx-auto px-6">
+          <p className="text-zinc-500 text-xs uppercase tracking-widest shrink-0">Para cualquier deporte</p>
+          <div className="hidden md:block w-px h-5 bg-zinc-800" />
+          <InfiniteSlider />
+        </div>
+      </motion.div>
+
+      {/* ── CÓMO FUNCIONA ── */}
+      <section className="max-w-5xl mx-auto px-6 py-24">
+        <motion.div
+          initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }} transition={{ duration: 0.5 }}
+          className="text-center mb-14"
+        >
+          <p className="text-zinc-500 text-xs uppercase tracking-widest mb-3">Cómo funciona</p>
+          <h2 className="text-2xl md:text-3xl font-bold tracking-tight">
+            Del caos al partido en{' '}
+            <span className="text-green-400">4 pasos</span>
+          </h2>
+        </motion.div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {[
-            { n: '1', text: 'Crea el evento — deporte, fecha, hora, lugar y cupo máximo' },
-            { n: '2', text: 'Comparte el link por WhatsApp — los jugadores lo abren sin registrarse' },
-            { n: '3', text: 'Cada jugador se anota, yapea y sube su captura de pago' },
-            { n: '4', text: 'Tú ves en tiempo real quién va y quién pagó' },
-          ].map((s) => (
-            <div key={s.n} className="flex items-start gap-4">
-              <span className="bg-green-500 text-black font-bold rounded-full w-7 h-7 flex items-center justify-center text-sm shrink-0">
+            {
+              icon: <CalendarPlus size={20} className="text-green-400" />,
+              n: '01',
+              title: 'Crea el evento',
+              text: 'Elige deporte, fecha, hora, lugar y cupo máximo en segundos.',
+            },
+            {
+              icon: <Send size={20} className="text-green-400" />,
+              n: '02',
+              title: 'Comparte el link',
+              text: 'Manda el link por WhatsApp. Los jugadores entran sin registrarse.',
+            },
+            {
+              icon: <Banknote size={20} className="text-green-400" />,
+              n: '03',
+              title: 'Cobras sin drama',
+              text: 'Cada jugador yapea y sube su captura. Sin cobrar en efectivo.',
+            },
+            {
+              icon: <Users size={20} className="text-green-400" />,
+              n: '04',
+              title: 'Solo aparece a jugar',
+              text: 'Ves en tiempo real quién va y quién pagó. Tú solo te preocupas por ganar.',
+            },
+          ].map((s, i) => (
+            <motion.div
+              key={s.n}
+              initial={{ opacity: 0, y: 28 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: i * 0.1 }}
+              whileHover={{ y: -4, transition: { duration: 0.2 } }}
+              className="relative group flex flex-col gap-4 p-5 rounded-2xl border border-white/8 bg-white/3 hover:bg-white/5 hover:border-white/15 backdrop-blur-sm transition-colors duration-200 cursor-default"
+            >
+              {/* Number badge */}
+              <span className="absolute top-4 right-4 text-xs font-bold text-zinc-700 group-hover:text-zinc-600 transition-colors">
                 {s.n}
               </span>
-              <p className="text-zinc-300 text-sm pt-0.5">{s.text}</p>
-            </div>
+
+              {/* Icon box */}
+              <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-green-500/10 border border-green-500/20 group-hover:bg-green-500/15 transition-colors duration-200">
+                {s.icon}
+              </div>
+
+              <div>
+                <h3 className="font-semibold text-white text-sm mb-1.5">{s.title}</h3>
+                <p className="text-zinc-500 text-xs leading-relaxed">{s.text}</p>
+              </div>
+
+              {/* Subtle bottom accent on hover */}
+              <div className="absolute bottom-0 left-4 right-4 h-px bg-gradient-to-r from-transparent via-green-500/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            </motion.div>
           ))}
         </div>
       </section>
 
-      {/* Features */}
-      <section className="max-w-4xl mx-auto px-6 py-8 grid grid-cols-1 md:grid-cols-2 gap-4">
-        {[
-          {
-            icon: <Share2 className="text-green-400" size={22} />,
-            title: 'Un link, todo resuelto',
-            desc: 'Los jugadores lo abren desde WhatsApp sin descargar ninguna app.',
-          },
-          {
-            icon: <Clock className="text-green-400" size={22} />,
-            title: 'Tiempo real',
-            desc: 'La lista se actualiza automáticamente. Sabes al instante cuántos van.',
-          },
-          {
-            icon: <CreditCard className="text-green-400" size={22} />,
-            title: 'Pagos con Yape / Plin',
-            desc: 'Los jugadores suben su captura. Tú ves quién pagó y quién está pendiente.',
-          },
-          {
-            icon: <MapPin className="text-green-400" size={22} />,
-            title: 'Cualquier deporte',
-            desc: 'Fútbol, vóley, surf, básquet — cualquier actividad grupal que necesite organización.',
-          },
-        ].map((f) => (
-          <div key={f.title} className="bg-zinc-900 border border-zinc-800 rounded-xl p-5 flex gap-4">
-            <div className="mt-0.5 shrink-0">{f.icon}</div>
-            <div>
-              <h3 className="font-semibold text-white mb-1">{f.title}</h3>
-              <p className="text-zinc-400 text-sm">{f.desc}</p>
-            </div>
-          </div>
-        ))}
+      {/* ── FEATURES ── */}
+      <section className="max-w-5xl mx-auto px-6 pb-24">
+        <motion.div
+          initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }} transition={{ duration: 0.5 }}
+          className="text-center mb-14"
+        >
+          <p className="text-zinc-500 text-xs uppercase tracking-widest mb-3">Por qué Tinkuy</p>
+          <h2 className="text-2xl md:text-3xl font-bold tracking-tight">
+            Todo lo que necesitas,{' '}
+            <span className="text-green-400">nada de lo que no</span>
+          </h2>
+        </motion.div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {[
+            {
+              icon: <Share2 size={22} className="text-green-400" />,
+              title: 'Un link, todo resuelto',
+              desc: 'Los jugadores lo abren desde WhatsApp sin descargar ninguna app ni crear cuenta.',
+            },
+            {
+              icon: <Clock size={22} className="text-green-400" />,
+              title: 'Actualizaciones en tiempo real',
+              desc: 'La lista se actualiza automáticamente cada pocos segundos. Sabes al instante cuántos van.',
+            },
+            {
+              icon: <CreditCard size={22} className="text-green-400" />,
+              title: 'Pagos con Yape / Plin',
+              desc: 'Los jugadores suben su captura de pago. Tú ves quién pagó y quién está pendiente sin hacer nada extra.',
+            },
+            {
+              icon: <MapPin size={22} className="text-green-400" />,
+              title: 'Cualquier deporte',
+              desc: 'Fútbol, vóley, surf, básquet — cualquier actividad grupal que necesite organización.',
+            },
+          ].map((f, i) => (
+            <motion.div
+              key={f.title}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.45, delay: i * 0.09 }}
+              whileHover={{ scale: 1.015, transition: { duration: 0.15 } }}
+              className="group flex gap-5 p-6 rounded-2xl border border-white/8 bg-white/3 hover:bg-white/5 hover:border-white/14 backdrop-blur-sm transition-colors duration-200 cursor-default"
+            >
+              <div className="shrink-0 flex items-center justify-center w-11 h-11 rounded-xl bg-green-500/10 border border-green-500/20 group-hover:bg-green-500/15 transition-colors duration-200 mt-0.5">
+                {f.icon}
+              </div>
+              <div>
+                <h3 className="font-semibold text-white mb-2">{f.title}</h3>
+                <p className="text-zinc-400 text-sm leading-relaxed">{f.desc}</p>
+              </div>
+            </motion.div>
+          ))}
+        </div>
       </section>
 
-      {/* Precios */}
-      <section className="max-w-2xl mx-auto px-6 py-16">
-        <h2 className="text-center text-zinc-500 text-sm uppercase tracking-widest mb-8">Planes</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      {/* ── PRECIOS ── */}
+      <section className="max-w-2xl mx-auto px-6 py-16 border-t border-white/5">
+        <motion.div
+          initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }} transition={{ duration: 0.5 }}
+          className="text-center mb-12"
+        >
+          <p className="text-zinc-500 text-xs uppercase tracking-widest mb-3">Planes</p>
+          <h2 className="text-2xl md:text-3xl font-bold tracking-tight">
+            Empieza gratis,{' '}
+            <span className="text-green-400">crece cuando quieras</span>
+          </h2>
+        </motion.div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
           {[
             {
               name: 'Gratis',
               price: 'S/ 0',
               sub: 'para siempre',
-              features: ['2 eventos', 'Jugadores ilimitados', 'Confirmación de pagos'],
+              features: ['2 eventos activos', 'Jugadores ilimitados', 'Confirmación de pagos'],
               highlight: false,
             },
             {
               name: 'Pro',
               price: 'S/ 9',
-              sub: 'por mes',
-              features: ['20 eventos', 'Jugadores ilimitados', 'Confirmación de pagos'],
+              sub: '/ mes',
+              features: ['20 eventos activos', 'Jugadores ilimitados', 'Confirmación de pagos'],
               highlight: true,
             },
             {
               name: 'Club',
               price: 'S/ 19',
-              sub: 'por mes',
-              features: ['50 eventos', 'Jugadores ilimitados', 'Ideal para ligas'],
+              sub: '/ mes',
+              features: ['50 eventos activos', 'Jugadores ilimitados', 'Ideal para ligas'],
               highlight: false,
             },
-          ].map((p) => (
-            <div
+          ].map((p, i) => (
+            <motion.div
               key={p.name}
-              className={`rounded-2xl p-5 flex flex-col gap-3 ${
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: i * 0.1 }}
+              className={`relative rounded-2xl p-5 flex flex-col gap-4 transition-all duration-200 ${
                 p.highlight
-                  ? 'bg-zinc-900 border border-green-500'
-                  : 'bg-zinc-900 border border-zinc-800'
+                  ? 'bg-white/5 border border-green-500/50 shadow-2xl shadow-green-500/8 md:scale-[1.05]'
+                  : 'bg-white/3 border border-white/8 hover:border-white/15'
               }`}
             >
               {p.highlight && (
-                <span className="text-xs font-bold text-green-400 uppercase tracking-widest">Popular</span>
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-green-500 text-black text-xs font-bold">
+                  Popular
+                </div>
               )}
               <div>
-                <p className="text-lg font-bold">{p.name}</p>
-                <p className="text-2xl font-bold mt-1">{p.price} <span className="text-zinc-500 text-sm font-normal">{p.sub}</span></p>
+                <p className="text-base font-semibold text-white/80">{p.name}</p>
+                <p className="text-3xl font-bold mt-1 tracking-tight">
+                  {p.price}
+                  <span className="text-zinc-500 text-sm font-normal ml-1">{p.sub}</span>
+                </p>
               </div>
-              <ul className="flex flex-col gap-1.5">
-                {p.features.map(f => (
-                  <li key={f} className="text-zinc-400 text-sm flex items-center gap-2">
-                    <span className="text-green-400">✓</span> {f}
+              <div className="h-px bg-white/6" />
+              <ul className="flex flex-col gap-2">
+                {p.features.map((f) => (
+                  <li key={f} className="text-zinc-400 text-sm flex items-center gap-2.5">
+                    <span className="text-green-400 text-base leading-none">✓</span>
+                    {f}
                   </li>
                 ))}
               </ul>
-            </div>
+            </motion.div>
           ))}
         </div>
-        <p className="text-center text-zinc-600 text-xs mt-4">
+
+        <p className="text-center text-zinc-600 text-xs mt-6">
           Plan Pro y Club vía WhatsApp · Activación en menos de 24h
         </p>
       </section>
 
-      {/* CTA */}
-      <section className="text-center px-6 py-16 border-t border-zinc-800">
-        <h2 className="text-2xl font-bold mb-2">¿Listo para el próximo partido?</h2>
-        <p className="text-zinc-500 text-sm mb-6">Únete gratis. Sin tarjeta. Sin descargas.</p>
-        <Link href="/auth">
-          <Button className="bg-green-500 hover:bg-green-400 text-black font-bold px-8 py-4 rounded-xl text-base">
-            Empezar gratis →
-          </Button>
-        </Link>
+      {/* ── CTA FINAL ── */}
+      <section className="relative text-center px-6 py-28 border-t border-white/5 overflow-hidden">
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+          <div className="w-[600px] h-[350px] rounded-full bg-green-500/7 blur-[110px]" />
+        </div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="relative flex flex-col items-center gap-5"
+        >
+          <p className="text-zinc-500 text-xs uppercase tracking-widest">Únete hoy</p>
+          <h2 className="text-3xl md:text-5xl font-bold tracking-tight max-w-xl leading-tight">
+            ¿Listo para el{' '}
+            <span className="text-green-400">próximo partido?</span>
+          </h2>
+          <p className="text-zinc-500 text-sm max-w-sm">
+            Sin tarjeta de crédito. Sin descargas. Empieza en menos de un minuto.
+          </p>
+          <div className="flex flex-col sm:flex-row items-center gap-3 mt-2">
+            <GlassButton href="/auth">Empezar gratis</GlassButton>
+            <Link href="/auth" className="flex items-center gap-1.5 text-zinc-400 hover:text-white text-sm transition-colors">
+              Ver demo <ArrowRight size={14} />
+            </Link>
+          </div>
+        </motion.div>
       </section>
 
-      <footer className="text-center text-zinc-600 text-sm py-8 border-t border-zinc-800">
+      <footer className="text-center text-zinc-700 text-sm py-8 border-t border-white/5">
         Tinkuy © 2026 — Hecho con ⚽ en Perú
       </footer>
     </main>
